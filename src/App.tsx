@@ -10,10 +10,8 @@ import {
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import dataProvider, {
-  GraphQLClient,
-  liveProvider,
-} from "@refinedev/nestjs-query";
+import { dataProvider, liveProvider } from "./providers";
+
 import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
@@ -21,10 +19,7 @@ import routerBindings, {
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
-import { createClient } from "graphql-ws";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { authProvider } from "./authProvider";
-import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import {
   BlogPostCreate,
@@ -42,12 +37,6 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 
-const API_URL = "https://api.nestjs-query.refine.dev/graphql";
-const WS_URL = "wss://api.nestjs-query.refine.dev/graphql";
-
-const gqlClient = new GraphQLClient(API_URL);
-const wsClient = createClient({ url: WS_URL });
-
 function App() {
   return (
     <BrowserRouter>
@@ -57,11 +46,11 @@ function App() {
           <AntdApp>
             <DevtoolsProvider>
               <Refine
-                dataProvider={dataProvider(gqlClient)}
-                liveProvider={liveProvider(wsClient)}
+                dataProvider={dataProvider}
+                liveProvider={liveProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                authProvider={authProvider}
+                // authProvider={authProvider}
                 resources={[
                   {
                     name: "blog_posts",
@@ -100,7 +89,7 @@ function App() {
                         fallback={<CatchAllNavigate to="/login" />}
                       >
                         <ThemedLayoutV2
-                          Header={() => <Header sticky />}
+                          // Header={}
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
                         >
                           <Outlet />
